@@ -1,0 +1,14 @@
+{
+  "name": "fetch_challenge",
+  "version": "1.0.0",
+  "description": "Node JS app for fetch challenge",
+  "main": "index.js",
+  "scripts": {
+  },
+  "author": "Justin Kurdila",
+  "license": "ISC",
+  "keywords": [],
+  "devDependencies": {
+    "cypress": "^13.13.0"
+  }
+}
