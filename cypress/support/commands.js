@@ -37,14 +37,14 @@ Cypress.Commands.add('weighScale', () => {
 Cypress.Commands.add('getResult', () => {
     cy.get(selectors.result_class).should('be.visible');
     cy.get(selectors.result_class).contains('Result').should('be.visible');
-    cy.get(selectors.reset_id).filter(':disabled').as('disabledResultButton')
+    cy.get(selectors.reset_id).filter(':disabled').as('disabledResultButton');
     cy.get('@disabledResultButton').should('exist');
     cy.get('@disabledResultButton').should('be.visible');
     return cy.get('@disabledResultButton').invoke('text');
 });
 
 
-Cypress.Commands.add('populateScaleWithNumbers', (group1, group2) => {
+Cypress.Commands.add('populateScaleWithGroups', (group1, group2) => {
     cy.resetScale();
     for (const key in group1) {
         const value = group1[key];
@@ -56,11 +56,10 @@ Cypress.Commands.add('populateScaleWithNumbers', (group1, group2) => {
     };
 });
 
-Cypress.Commands.add('weighGoldBarsNumbers', (bar1, bar2) => {
+Cypress.Commands.add('populateScaleWithNumbers', (bar1, bar2) => {
     cy.resetScale();
     cy.get(selectors.left0_id).type(bar1);
     cy.get(selectors.right0_id).type(bar2);
-    cy.weighScale();
 });
 
 Cypress.Commands.add('getWeighingsList', () => {
@@ -78,4 +77,21 @@ Cypress.Commands.add('clickBarNumberAndValidate', (coins) => {
       });
 });
 
+Cypress.Commands.add('countWeighings', () => {
+    cy.get('ol').find('li').its('length').then((count) => {
+        return count;
+    });
+});
 
+
+Cypress.Commands.add('clickFakeBarAndSucceed', (fakeBar) => {
+    cy.countWeighings().as('countWeighingsResult');
+    cy.getWeighingsList().as('weighingListResult')
+
+    cy.get('@countWeighingsResult').then((countWeighingsResult) => {
+        cy.log(`NUMBER OF WEIGHINGS: ${countWeighingsResult}`);
+    });
+    cy.get('@weighingListResult').then((weighingListResult) => {
+        cy.log(`COMPLETE WEIGHING LIST: ${weighingListResult}`);
+    });
+});

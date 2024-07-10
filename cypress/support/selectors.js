@@ -5,6 +5,7 @@ export default {
     result_class: '.result',
     game_class: '.game',
     gameInfo_class: '.game-info',
+    coins_class: '.coins',
     coin0_id: '#coin_0',
     coin1_id: '#coin_1',
     coin2_id: '#coin_2',

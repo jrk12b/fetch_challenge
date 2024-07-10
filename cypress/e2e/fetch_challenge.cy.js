@@ -31,11 +31,11 @@ describe('Fetch Challenge 2024', () => {
   });
 
   it('Test Case #3: filling out the bowls grids with bar numbers (0 to 8)', () => {
-    cy.populateScaleWithNumbers(group_1_object, group_2_object);
+    cy.populateScaleWithGroups(group_1_object, group_2_object);
   });
 
   it('Test Case #4: getting a list of weighing', () => {
-    cy.populateScaleWithNumbers(group_1_object, group_2_object);
+    cy.populateScaleWithGroups(group_1_object, group_2_object);
 
     cy.weighScale();
 
@@ -52,12 +52,12 @@ describe('Fetch Challenge 2024', () => {
     cy.clickBarNumberAndValidate(coins);
   });
 
-  it.only('Code the Algorithm', () => {
+  it('Code the Algorithm', () => {
     // Code the algorithm from step 1 which uses a set of actions from step 2 to find the fake gold bar
     // The algorithm should populate and weigh gold bars until a fake one is found, click on a fake bar number, output the alert message, number of weighing, and list of weighing made.
 
     // Weigh group_1_object and group_2_object
-    cy.populateScaleWithNumbers(group_1_object, group_2_object);
+    cy.populateScaleWithGroups(group_1_object, group_2_object);
     cy.weighScale();
     cy.getResult().then((result) => {
       cy.log(`Result is ${result}`);
@@ -65,16 +65,20 @@ describe('Fetch Challenge 2024', () => {
         cy.log('Weighing result - group_1 and group2 are EQUAL');
         cy.log('The fake bar is in group_3!');
         cy.resetScale();
-        cy.weighGoldBarsNumbers('6', '7');
+        cy.populateScaleWithNumbers('6', '7');
+        cy.weighScale();
         cy.getResult().then((result) => {
           if (result === '=') {
             cy.log('The fake bar is 8!');
+            cy.clickFakeBarAndSucceed('8');
           }
           else if (result === '<') {
             cy.log('The fake bar is 6!');
+            cy.clickFakeBarAndSucceed('6');
           }
           else if (result === '>') {
             cy.log('The fake bar is 7!');
+            cy.clickFakeBarAndSucceed('7');
           }
         });
       }
@@ -82,16 +86,20 @@ describe('Fetch Challenge 2024', () => {
         cy.log('Weighings result - group_1 is LESS than group_2');
         cy.log('The fake bar is in group_1!');
         cy.resetScale();
-        cy.weighGoldBarsNumbers('0', '1');
+        cy.populateScaleWithNumbers('0', '1');
+        cy.weighScale();
         cy.getResult().then((result) => {
           if (result === '=') {
             cy.log('The fake bar is 2!');
+            cy.clickFakeBarAndSucceed('2');
           }
           else if (result ==='<') {
             cy.log('The fake bar is 0!');
+            cy.clickFakeBarAndSucceed('0');
           }
           else if (result ==='>') {
             cy.log('The fake bar is 1!');
+            cy.clickFakeBarAndSucceed('1');
           }
         });
       }
@@ -99,16 +107,20 @@ describe('Fetch Challenge 2024', () => {
         cy.log('Weighings result - group_1 is GREATER than group_2');
         cy.log('The fake bar is in group_2!');
         cy.resetScale();
-        cy.weighGoldBarsNumbers('3', '4');
+        cy.populateScaleWithNumbers('3', '4');
+        cy.weighScale();
         cy.getResult().then((result) => {
           if (result === '=') {
             cy.log('The fake bar is 5!');
+            cy.clickFakeBarAndSucceed('5');
           }
           else if (result ==='<') {
             cy.log('The fake bar is 3!');
+            cy.clickFakeBarAndSucceed('3');
           }
           else if (result ==='>') {
             cy.log('The fake bar is 4!');
+            cy.clickFakeBarAndSucceed('4');
           }
         });
       }
