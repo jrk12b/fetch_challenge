@@ -26,11 +26,11 @@ describe('Fetch Challenge 2024', () => {
 
   it('Test Case #3: filling out the bowls grids with bar numbers (0 to 8)', () => {
     const left_ids = [ 
-      '#left_0', '#left_1', '#left_2', '#left_3', '#left_4', '#left_5', '#left_6', '#left_7','#left_8' 
+      selectors.left0_id, selectors.left1_id, selectors.left2_id, selectors.left3_id, selectors.left4_id, selectors.left5_id, selectors.left6_id, selectors.left7_id, selectors.left8_id 
     ];
 
     const right_ids = [ 
-      '#right_0', '#right_1', '#right_2', '#right_3', '#right_4', '#right_5', '#right_6', '#right_7','#right_8' 
+      selectors.right0_id, selectors.right1_id, selectors.right2_id, selectors.right3_id, selectors.right4_id, selectors.right5_id, selectors.right6_id, selectors.right7_id, selectors.right8_id
     ];
 
     left_ids.forEach((id) => {
@@ -93,8 +93,136 @@ describe('Fetch Challenge 2024', () => {
     });
   });
 
-  it('Code the Algorithm', () => {
+  it.only('Code the Algorithm', () => {
     // Code the algorithm from step 1 which uses a set of actions from step 2 to find the fake gold bar
     // The algorithm should populate and weigh gold bars until a fake one is found, click on a fake bar number, output the alert message, number of weighing, and list of weighing made.
+    const left_ids = [ 
+      selectors.left0_id, selectors.left1_id, selectors.left2_id, selectors.left3_id, selectors.left4_id, selectors.left5_id, selectors.left6_id, selectors.left7_id, selectors.left8_id 
+    ];
+
+    const right_ids = [ 
+      selectors.right0_id, selectors.right1_id, selectors.right2_id, selectors.right3_id, selectors.right4_id, selectors.right5_id, selectors.right6_id, selectors.right7_id, selectors.right8_id
+    ];
+    
+    const group_1_object = {
+      '0': selectors.left0_id,
+      '1': selectors.left1_id, 
+      '2': selectors.left2_id, 
+    };
+
+    const group_1_list = [ '0', '1', '2' ];
+
+    const group_2_object = {
+      '3': selectors.right0_id,
+      '4': selectors.right1_id, 
+      '5': selectors.right2_id, 
+    };
+
+    const group_3_object = {
+      '6': selectors.right0_id,
+      '7': selectors.right1_id, 
+      '8': selectors.right2_id, 
+    };
+
+    for (const key in group_1_object) {
+      const value = group_1_object[key];
+      cy.get(value).clear().type(key);
+    };
+
+    for (const key in group_2_object) {
+      const value = group_2_object[key];
+      cy.get(value).clear().type(key);
+    };
+
+    cy.get(selectors.weigh_id).click();
+    cy.get(selectors.gameInfo_class).find('li', { timeout: 5000 }).as('weighings_result');
+    cy.get('@weighings_result').should('be.visible').then(($result) => { 
+      if ($result.text().includes('=')) {
+        cy.log('First Weighings result - group_1 and group2 are EQUAL');
+        cy.log('The fake bar is in group_3!');
+        left_ids.forEach((id) => {
+          cy.get(selectors.game_class).find(id).clear();
+        });
+        
+        right_ids.forEach((id) => {
+          cy.get(selectors.game_class).find(id).clear();
+        });
+         // weighing group 3
+         cy.get(selectors.left0_id).clear().type('6');
+         cy.get(selectors.right0_id).clear().type('7');
+         cy.get(selectors.weigh_id).click();
+        cy.wait(5000);
+         cy.get(selectors.gameInfo_class).find('li').last().as('weighings_result');
+         cy.get('@weighings_result').should('be.visible').then(($result) => { 
+           if ($result.text().includes('=')) {
+             cy.log('The fake bar is 8!');
+     
+           } else if ($result.text().includes('<')) {
+             cy.log('The fake bar is 6!');
+             
+     
+           } else if ($result.text().includes('>')) {
+             cy.log('The fake bar is 7!');
+           };
+         });
+      } else if ($result.text().includes('<')) {
+        cy.log('First Weighings result - group_1 is LESS than group_2');
+        cy.log('The fake bar is in group_1!');
+        left_ids.forEach((id) => {
+          cy.get(selectors.game_class).find(id).clear();
+        });
+        
+        right_ids.forEach((id) => {
+          cy.get(selectors.game_class).find(id).clear();
+        });
+        // weighing group 1
+        cy.get(selectors.left0_id).clear().type('0');
+        cy.get(selectors.right0_id).clear().type('1');
+        cy.get(selectors.weigh_id).click();
+        cy.wait(5000);
+        cy.get(selectors.gameInfo_class).find('li').last().as('weighings_result');
+        cy.get('@weighings_result').should('be.visible').then(($result) => { 
+          if ($result.text().includes('=')) {
+            cy.log('The fake bar is 2!');
+    
+          } else if ($result.text().includes('<')) {
+            cy.log('The fake bar is 0!');
+            
+    
+          } else if ($result.text().includes('>')) {
+            cy.log('The fake bar is 1!');
+          };
+        });
+      } else if ($result.text().includes('>')) {
+        cy.log('First Weighings result - group_1 is GREATER than group_2');
+        cy.log('The fake bar is in group_2!');
+        left_ids.forEach((id) => {
+          cy.get(selectors.game_class).find(id).clear();
+        });
+        
+        right_ids.forEach((id) => {
+          cy.get(selectors.game_class).find(id).clear();
+        });
+         // weighing group 2
+         cy.get(selectors.left0_id).clear().type('3');
+         cy.get(selectors.right0_id).clear().type('4');
+         cy.get(selectors.weigh_id).click();
+         cy.wait(5000);
+         cy.get(selectors.gameInfo_class).find('li').last().as('weighings_result');
+         cy.get('@weighings_result').should('be.visible').then(($result) => { 
+           if ($result.text().includes('=')) {
+             cy.log('The fake bar is 5!');
+     
+           } else if ($result.text().includes('<')) {
+             cy.log('The fake bar is 3!');
+             
+     
+           } else if ($result.text().includes('>')) {
+             cy.log('The fake bar is 4!');
+           };
+         });
+
+      };
+    });  
   });
 });
