@@ -6,20 +6,20 @@ This is a Node JS repo using Cypress
 
 1. Clone repo locally
 
-* `git clone https://github.com/jrk12b/fetch_challenge.git`
+- `git clone https://github.com/jrk12b/fetch_challenge.git`
 
 2. Navigate to root project directory
 
-* `cd fetch_challenge`
+- `cd fetch_challenge`
 
 3. Install Dependencies
 
-* `npm i`
+- `npm i`
 
 4. Run Cypress Tests locally
 
-* To run cypress in command line - `npm run cy:run`
-* To open cypress in cypress browser - `npm run cy:open`
+- To run cypress in command line - `npm run cy:run`
+- To open cypress in cypress browser - `npm run cy:open`
 
 ## Additional Details:
 

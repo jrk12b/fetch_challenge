@@ -81,71 +81,50 @@ describe('Fetch Challenge 2024', () => {
 		// Step 1
 		cy.populateScaleWithGroups(group_1, group_2);
 		cy.weighScale();
+		// Step 2
+		let group;
+		let numbers;
 		cy.getResult().then((result) => {
-			cy.log(`Result is ${result}`);
-			// Step 2
-			if (result === '=') {
-				cy.log('Weighing result - group_1 and group2 are EQUAL');
-				cy.log('The fake bar is in group_3!');
-				cy.resetScale();
-				// Step 3
-				cy.populateScaleWithNumbers('6', '7');
-				cy.weighScale();
-				cy.getResult().then((result) => {
-					if (result === '=') {
-						cy.log('The fake bar is 8!');
-						cy.clickFakeNumberAndSucceed('8');
-					} else if (result === '<') {
-						cy.log('The fake bar is 6!');
-						cy.clickFakeNumberAndSucceed('6');
-					} else if (result === '>') {
-						cy.log('The fake bar is 7!');
-						cy.clickFakeNumberAndSucceed('7');
-					}
-				});
+			switch (result) {
+				case '=':
+					cy.log('Weighing result - group_1 and group2 are EQUAL');
+					cy.log('The fake bar is in group_3!');
+					group = 'group_3';
+					numbers = ['6', '7', '8'];
+					break;
+				case '<':
+					cy.log('Weighings result - group_1 is LESS than group_2');
+					cy.log('The fake bar is in group_1!');
+					group = 'group_1';
+					numbers = ['0', '1', '2'];
+					break;
+				case '>':
+					cy.log('Weighings result - group_1 is GREATER than group_2');
+					cy.log('The fake bar is in group_2!');
+					group = 'group_2';
+					numbers = ['3', '4', '5'];
+					break;
 			}
-			// Step 2
-			else if (result === '<') {
-				cy.log('Weighings result - group_1 is LESS than group_2');
-				cy.log('The fake bar is in group_1!');
-				cy.resetScale();
-				// Step 3
-				cy.populateScaleWithNumbers('0', '1');
-				cy.weighScale();
-				cy.getResult().then((result) => {
-					if (result === '=') {
-						cy.log('The fake bar is 2!');
-						cy.clickFakeNumberAndSucceed('2');
-					} else if (result === '<') {
-						cy.log('The fake bar is 0!');
-						cy.clickFakeNumberAndSucceed('0');
-					} else if (result === '>') {
-						cy.log('The fake bar is 1!');
-						cy.clickFakeNumberAndSucceed('1');
-					}
-				});
-			}
-			// Step 2
-			else if (result === '>') {
-				cy.log('Weighings result - group_1 is GREATER than group_2');
-				cy.log('The fake bar is in group_2!');
-				cy.resetScale();
-				// Step 3
-				cy.populateScaleWithNumbers('3', '4');
-				cy.weighScale();
-				cy.getResult().then((result) => {
-					if (result === '=') {
-						cy.log('The fake bar is 5!');
-						cy.clickFakeNumberAndSucceed('5');
-					} else if (result === '<') {
-						cy.log('The fake bar is 3!');
-						cy.clickFakeNumberAndSucceed('3');
-					} else if (result === '>') {
-						cy.log('The fake bar is 4!');
-						cy.clickFakeNumberAndSucceed('4');
-					}
-				});
-			}
+			// Step 3
+			cy.resetScale();
+			cy.populateScaleWithNumbers(numbers[0], numbers[1]);
+			cy.weighScale();
+			cy.getResult().then((result) => {
+				switch (result) {
+					case '=':
+						cy.log(`The fake bar is ${numbers[2]}!`);
+						cy.clickFakeNumberAndSucceed(numbers[2]);
+						break;
+					case '<':
+						cy.log(`The fake bar is ${numbers[0]}!`);
+						cy.clickFakeNumberAndSucceed(numbers[0]);
+						break;
+					case '>':
+						cy.log(`The fake bar is ${numbers[1]}!`);
+						cy.clickFakeNumberAndSucceed(numbers[1]);
+						break;
+				}
+			});
 		});
 	});
 });

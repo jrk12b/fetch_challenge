@@ -8,7 +8,7 @@ Cypress.Commands.add('resetScale', () => {
 // This command clicks the weigh button which initializes the weighing of the scale
 Cypress.Commands.add('weighScale', () => {
 	cy.get(selectors.weigh_id).click();
-	cy.wait(3000);
+	cy.wait(2000);
 });
 
 // This command gets the result of the weighing and returns the text (=, >, <)
