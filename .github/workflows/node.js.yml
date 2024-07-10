@@ -19,13 +19,13 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-      - name: Install Dependencies
-        run: npm ci
   cypress-run:
     runs-on: ubuntu-latest
     needs: [setup]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: npm ci
       - name: Run cypress tests
         run: npm run cy:run
