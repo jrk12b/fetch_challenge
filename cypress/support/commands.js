@@ -1,39 +1,17 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import selectors from '../support/selectors';
 
+// This command clicks the reset button which removes all numbers from the scale
 Cypress.Commands.add('resetScale', () => {
     cy.get(selectors.gameInfo_class).prev().find(selectors.reset_id).click();
 });
 
+// This command clicks the weigh button which initializes the weighing of the scale
 Cypress.Commands.add('weighScale', () => {
     cy.get(selectors.weigh_id).click();
     cy.wait(3000);
 });
 
+// This command gets the result of the weighing and returns the text (=, >, <)
 Cypress.Commands.add('getResult', () => {
     cy.get(selectors.result_class).should('be.visible');
     cy.get(selectors.result_class).contains('Result').should('be.visible');
@@ -43,11 +21,13 @@ Cypress.Commands.add('getResult', () => {
     return cy.get('@disabledResultButton').invoke('text');
 });
 
-
-Cypress.Commands.add('populateScaleWithGroups', (group1, group2) => {
+// This command populates the scale with groups of numbers
+// This command accepts group objects as parameters. Object should include number as key and selector id as value
+// Example: group_1 = { '0': selectors.left0_id, '1': selectors.left1_id, };
+Cypress.Commands.add('populateScaleWithGroups', (group_1, group2) => {
     cy.resetScale();
-    for (const key in group1) {
-        const value = group1[key];
+    for (const key in group_1) {
+        const value = group_1[key];
         cy.get(value).type(key);
       };
       for (const key in group2) {
@@ -56,35 +36,41 @@ Cypress.Commands.add('populateScaleWithGroups', (group1, group2) => {
     };
 });
 
+// This command populates the scale with two specific numbers
+// This command accepts two strings to weigh
 Cypress.Commands.add('populateScaleWithNumbers', (bar1, bar2) => {
     cy.resetScale();
     cy.get(selectors.left0_id).type(bar1);
     cy.get(selectors.right0_id).type(bar2);
 });
 
+// This command gets the list of weighings and returns the list
 Cypress.Commands.add('getWeighingsList', () => {
     cy.get(selectors.gameInfo_class).find('ol', { timeout: 3000 }).as('weighings_ol');
     return cy.get('@weighings_ol').last().invoke('text');
 });
 
-Cypress.Commands.add('clickBarNumberAndValidate', (coins) => {
-    coins.forEach((coin) => {
-        cy.get(coin).click();
-        cy.on('window:alert', (alertText) => {
-          console.log(alertText);
-          expect(alertText).to.be.oneOf(['Oops! Try Again!', 'Yay! You find it!']);
-        });
-      });
-});
-
+// This command counts the number of weighings in the list and returns the count
 Cypress.Commands.add('countWeighings', () => {
     cy.get('ol').find('li').its('length').then((count) => {
         return count;
     });
 });
 
+// This command clicks the fake bar number and validates the alert is Yay! You find it!
+// This command accepts one string as a parameter
+Cypress.Commands.add('clickFakeNumberAndValidate', (barNumber) => {
+    cy.get(selectors.coins_class).contains(barNumber).click();
+    cy.on('window:alert', (alertText) => {
+        console.log(alertText);
+        expect(alertText).to.eq('Yay! You find it!');
+    });
+});
 
-Cypress.Commands.add('clickFakeBarAndSucceed', (fakeBar) => {
+// This command clicks the fake bar number and logs the weighing list, weiging count, and alert text
+// This command accepts one string as a parameter
+Cypress.Commands.add('clickFakeNumberAndSucceed', (barNumber) => {
+    cy.clickFakeNumberAndValidate(barNumber);
     cy.countWeighings().as('countWeighingsResult');
     cy.getWeighingsList().as('weighingListResult')
 
@@ -93,5 +79,15 @@ Cypress.Commands.add('clickFakeBarAndSucceed', (fakeBar) => {
     });
     cy.get('@weighingListResult').then((weighingListResult) => {
         cy.log(`COMPLETE WEIGHING LIST: ${weighingListResult}`);
+    });
+});
+
+// This command clicks on the bar number and validates the alert text is either Oops or Yay
+// This command accepts one string as a parameter
+Cypress.Commands.add('clickBarNumberAndValidate', (barNumber) => {
+    cy.get(selectors.coins_class).contains(barNumber).click();
+    cy.on('window:alert', (alertText) => {
+        console.log(alertText);
+        expect(alertText).to.be.oneOf(['Oops! Try Again!', 'Yay! You find it!']);
     });
 });
