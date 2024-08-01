@@ -2,6 +2,10 @@
 
 This is a Node JS repo using Cypress
 
+- Cypress tests are configured to run in pipeline with github actions (`node.js.yml`)
+- https://github.com/jrk12b/fetch_challenge/actions
+- Code is located in `/cypress/e2e/fetch_challenge.cy.js` and `cypress/support/commands.js`
+
 ## Installation and Usage:
 
 1. Clone repo locally
@@ -20,9 +24,3 @@ This is a Node JS repo using Cypress
 
 - To run cypress in command line - `npm run cy:run`
 - To open cypress in cypress browser - `npm run cy:open`
-
-## Additional Details:
-
-- Cypress tests are also configured to run in pipeline with github actions (`node.js.yml`)
-- https://github.com/jrk12b/fetch_challenge/actions
-- Code is located in `/cypress/e2e/fetch_challenge.cy.js`
