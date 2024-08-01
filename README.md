@@ -24,3 +24,9 @@ This is a Node JS repo using Cypress
 
 - To run cypress in command line - `npm run cy:run`
 - To open cypress in cypress browser - `npm run cy:open`
+
+5. Run Cypress tests in github actions
+
+- navitate here `https://github.com/jrk12b/fetch_challenge/actions/workflows/node.js.yml`
+- Click the Run workflow dropdown
+- Click Run workflow
